@@ -1,1 +1,25 @@
 
+#USE CDATA1
+y2 <- cdata1$logSalePrice
+x1 <- cdata1$TotalFloorSF
+x2 <- cdata1$OverallQual
+
+model6 <- lm(y2 ~ x1 + x2 , data = cdata1)
+
+ggplotRegression <- function (fit) {
+ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) + 
+  geom_point() +
+  theme_classic() +
+  labs(x="", y = "logSalePrice") +
+  stat_smooth(method = "lm", col = "blue") +
+  labs(title = paste("Adj R2 = ",signif(summary(fit)$adj.r.squared, 5),
+                     "Intercept =",signif(fit$coef[[1]],5 ),
+                     " Slope =",signif(fit$coef[[2]], 5),
+                     " P =",signif(summary(fit)$coef[2,4], 5)))
+
+}
+
+ggplotRegression(model6)
+
+par(mfrow = c(2,2))
+plot(model6)
